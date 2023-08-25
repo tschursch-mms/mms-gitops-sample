@@ -1,0 +1,28 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: podinfo
+  namespace: apps
+spec:
+  interval: 10m
+  chart:
+    spec:
+      chart: podinfo
+      version: "6.1.6"
+      sourceRef:
+        kind: HelmRepository
+        name: podinfo
+        namespace: apps
+  values:
+    image:
+      repository: ghcr.io/stefanprodan/podinfo # {"$imagepolicy": "apps:podinfo:name"}
+      tag: 6.4.0 # {"$imagepolicy": "apps:podinfo:tag"}
+    hpa:
+      enabled: false
+      maxReplicas: 2
+    linkerd:
+      profile:
+        enabled: false
+    serviceMonitor:
+      enabled: false
